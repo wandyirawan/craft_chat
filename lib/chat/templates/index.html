@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CraftChat</title>
+
+  <!-- Local stylesheet (dark elegant theme) -->
+  <link rel="stylesheet" href="/css/chat.css">
+
+  <!-- HTMX core + Server-Sent Events extension (unpkg CDN) -->
+  <script src="https://unpkg.com/htmx.org@2.0.4/dist/htmx.min.js"></script>
+  <script src="https://unpkg.com/htmx.org@2.0.4/dist/ext/sse.js"></script>
+</head>
+<body>
+  <!-- ============ Header ============ -->
+  <header class="chat-header">
+    <h1 class="logo">CraftChat</h1>
+    <span class="status-badge offline" id="connectionStatus">● Offline</span>
+  </header>
+
+  <!-- ============ Main chat area ============ -->
+  <!-- hx-sse opens the SSE stream and swaps incoming "message" events into
+       #messages. The form below declares the hx-post submission endpoint. -->
+  <main class="chat-container" id="messages" hx-sse="connect:/events swap:message">
+    <!-- Typing indicator (toggled by chat.js via .active) -->
+    <div class="typing-indicator" id="typingIndicator">
+      <span></span><span></span><span></span>
+    </div>
+
+    <!-- Static welcome message -->
+    <div class="message bot-message">Hello! I’m CraftChat. How can I help you today?</div>
+  </main>
+
+  <!-- ============ Footer / composer ============ -->
+  <footer class="chat-footer">
+    <!-- hx-post is declared on the form for HTMX; chat.js drives the actual
+         request via htmx.ajax() so we control optimistic UI + scrolling. -->
+    <form id="chatForm" class="input-wrapper" hx-post="/message" hx-target="#messages" hx-swap="beforeend">
+      <input
+        type="text"
+        id="msgInput"
+        name="msg"
+        placeholder="Type a message…"
+        autocomplete="off"
+      />
+      <button id="sendBtn" type="button" aria-label="Send message">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="22" y1="2" x2="11" y2="13"></line>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"></polygon>
+        </svg>
+      </button>
+    </form>
+  </footer>
+
+  <!-- Local event-handling logic -->
+  <script src="/js/chat.js"></script>
+</body>
+</html>

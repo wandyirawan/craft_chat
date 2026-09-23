@@ -50,7 +50,7 @@ Get API key di https://openrouter.ai/keys.
 ## Menjalankan
 
 ```bash
-mix phx.server
+mix run --no-halt
 ```
 
 Buka http://localhost:4000 di browser. Server berjalan di port **4000** secara default.
